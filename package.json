@@ -1,0 +1,14 @@
+{
+  "name": "recipes",
+  "version": "1.0.0",
+  "description": "Project with recipes",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Pawel Stanecki",
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^4.29.6"
+  }
+}
