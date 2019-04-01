@@ -16,4 +16,4 @@ const axiosAPIrequest = async query => {
   }
 };
 
-axiosAPIrequest('pasta');
+axiosAPIrequest('panini');
