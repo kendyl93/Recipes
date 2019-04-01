@@ -20,6 +20,7 @@
     "webpack-dev-server": "^3.2.1"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.4.0"
+    "@babel/polyfill": "^7.4.0",
+    "axios": "^0.18.0"
   }
 }
