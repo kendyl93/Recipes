@@ -1,19 +1,6 @@
-import axios from 'axios';
+import Search from './models/Search';
 
-const KEY = '11730e31820bef72836b43f4f01d1aa7';
-const axiosAPIrequest = async query => {
-  try {
-    const result = await axios(
-      `https://www.food2fork.com/api/search?key=${KEY}&q=${query}`
-    );
-    const {
-      data: { recipes }
-    } = result;
+const search = new Search('Pizza');
 
-    console.info({ recipes });
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-axiosAPIrequest('freshpanini');
+console.info({ search });
+search.axiosAPIrequest();
