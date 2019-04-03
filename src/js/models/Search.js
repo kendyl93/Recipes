@@ -14,8 +14,7 @@ export default class Search {
       const {
         data: { recipes }
       } = result;
-
-      console.info({ recipes });
+      this.recipes = recipes;
     } catch (error) {
       console.error(error);
     }
