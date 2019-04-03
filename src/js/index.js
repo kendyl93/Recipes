@@ -1,12 +1,16 @@
 import Search from './models/Search';
+import * as searchView from './views/searchView';
+import { elements } from './models/base';
 
 const state = {};
 
-const controlSearch = async () => {
-  const initialQuery = 'Pizza';
+const { searchForm } = elements;
 
-  if (initialQuery) {
-    state.search = new Search(initialQuery);
+const controlSearch = async () => {
+  const inputValue = searchView.inputValue();
+
+  if (inputValue) {
+    state.search = new Search(inputValue);
 
     await state.search.axiosAPIrequest();
 
@@ -14,7 +18,7 @@ const controlSearch = async () => {
   }
 };
 
-document.querySelector('.search').addEventListener('submit', event => {
+searchForm.addEventListener('submit', event => {
   event.preventDefault();
   controlSearch();
 });
