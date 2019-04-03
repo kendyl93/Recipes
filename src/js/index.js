@@ -8,13 +8,19 @@ const { searchForm } = elements;
 
 const controlSearch = async () => {
   const inputValue = searchView.inputValue();
+  const { renderRecipes, clearInputValue, clearSearchRecipesList } = searchView;
 
   if (inputValue) {
     state.search = new Search(inputValue);
 
+    clearInputValue();
+    clearSearchRecipesList();
+
     await state.search.axiosAPIrequest();
 
-    console.info({ search: state.search.recipes });
+    const { recipes } = state.search;
+
+    renderRecipes(recipes);
   }
 };
 
