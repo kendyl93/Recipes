@@ -1,6 +1,6 @@
 import Search from './models/Search';
 import * as searchView from './views/searchView';
-import { elements, renderLoader, clearLoader } from './models/base';
+import { elements, renderLoader, clearLoader } from './models/Base';
 
 const state = {};
 
