@@ -1,10 +1,10 @@
 import Search from './models/Search';
 import * as searchView from './views/searchView';
-import { elements } from './models/base';
+import { elements, renderLoader, clearLoader } from './models/base';
 
 const state = {};
 
-const { searchForm } = elements;
+const { searchForm, searchResults } = elements;
 
 const controlSearch = async () => {
   const inputValue = searchView.inputValue();
@@ -16,7 +16,9 @@ const controlSearch = async () => {
     clearInputValue();
     clearSearchRecipesList();
 
+    renderLoader(searchResults);
     await state.search.axiosAPIrequest();
+    clearLoader();
 
     const { recipes } = state.search;
 
