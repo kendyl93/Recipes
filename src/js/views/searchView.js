@@ -1,6 +1,6 @@
 import { elements } from '../models/Base';
 
-const { searchInput, searchRecipesList } = elements;
+const { searchInput, searchRecipesList, searchResultsPages } = elements;
 
 export const inputValue = () => searchInput.value;
 
@@ -10,6 +10,7 @@ export const clearInputValue = () => {
 
 export const clearSearchRecipesList = () => {
   searchRecipesList.innerHTML = '';
+  searchResultsPages.innerHTML = '';
 };
 
 const limitRecipeTitle = (title, limit = 17) => {
@@ -50,6 +51,50 @@ const renderRecipe = recipe => {
   searchRecipesList.insertAdjacentHTML('beforeend', markup);
 };
 
-export const renderRecipes = recipes => {
-  recipes.map(recipe => renderRecipe(recipe));
+const createPaginationButton = (currentPage, type) => {
+  const pageNumberToDisplay =
+    type === 'prev' ? currentPage - 1 : currentPage + 1;
+  const iconToDisplay = type === 'prev' ? 'left' : 'right';
+
+  return `
+  <button class="btn-inline results__btn--${type}" data-goToPage="${pageNumberToDisplay}">
+    <span>Page ${pageNumberToDisplay}</span>
+    <svg class="search__icon">
+        <use href="img/icons.svg#icon-triangle-${iconToDisplay}"></use>
+    </svg>
+  </button>
+`;
+};
+
+const renderPaginationButtons = (
+  currentPage,
+  recipesNumber,
+  recipesPerPage
+) => {
+  const allPages = Math.ceil(recipesNumber / recipesPerPage);
+  const nextPageType = 'next';
+  const previousPageType = 'prev';
+  let button;
+
+  if (currentPage === 1 && allPages > 1) {
+    button = createPaginationButton(currentPage, nextPageType);
+  } else if (currentPage < allPages) {
+    button = `
+      ${createPaginationButton(currentPage, previousPageType)}
+      ${createPaginationButton(currentPage, nextPageType)}
+      `;
+  } else if (currentPage === allPages && allPages > 1) {
+    button = `${createPaginationButton(currentPage, previousPageType)}`;
+  }
+
+  searchResultsPages.insertAdjacentHTML('afterbegin', button);
+};
+
+export const renderRecipes = (recipes, page = 1, recipesPerPage = 10) => {
+  const start = (page - 1) * recipesPerPage;
+  const end = page * recipesPerPage;
+
+  recipes.slice(start, end).map(recipe => renderRecipe(recipe));
+
+  renderPaginationButtons(page, recipes.length, recipesPerPage);
 };

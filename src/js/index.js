@@ -4,11 +4,11 @@ import { elements, renderLoader, clearLoader } from './models/Base';
 
 const state = {};
 
-const { searchForm, searchResults } = elements;
+const { searchForm, searchResults, searchResultsPages } = elements;
+const { renderRecipes, clearInputValue, clearSearchRecipesList } = searchView;
 
 const controlSearch = async () => {
   const inputValue = searchView.inputValue();
-  const { renderRecipes, clearInputValue, clearSearchRecipesList } = searchView;
 
   if (inputValue) {
     state.search = new Search(inputValue);
@@ -29,4 +29,15 @@ const controlSearch = async () => {
 searchForm.addEventListener('submit', event => {
   event.preventDefault();
   controlSearch();
+});
+
+searchResultsPages.addEventListener('click', event => {
+  const button = event.target.closest('.btn-inline');
+
+  if (button) {
+    const goToPage = parseInt(button.dataset.gotopage, 10);
+    const { recipes } = state.search;
+    clearSearchRecipesList();
+    renderRecipes(recipes, goToPage);
+  }
 });
