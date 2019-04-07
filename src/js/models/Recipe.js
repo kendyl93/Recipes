@@ -29,7 +29,7 @@ export default class Recipe {
     }
   }
 
-  calculatePreparingTime() {
+  calculatePrepareTime() {
     const ingredientsNumber = this.ingredients.length;
     const periods = Math.ceil(ingredientsNumber / 3);
     this.time = periods * 15;

@@ -18,12 +18,18 @@ const controlSearch = async () => {
     clearSearchRecipesList();
 
     renderLoader(searchResults);
-    await state.search.axiosAPIrequest();
-    clearLoader();
 
-    const { recipes } = state.search;
+    try {
+      await state.search.axiosAPIrequest();
+      clearLoader();
 
-    renderRecipes(recipes);
+      const { recipes } = state.search;
+
+      renderRecipes(recipes);
+    } catch (error) {
+      console.info(error);
+      clearLoader();
+    }
   }
 };
 
@@ -43,10 +49,26 @@ searchResultsPages.addEventListener('click', event => {
   }
 });
 
-const recipe = new Recipe(47746);
+const controlRecipe = async () => {
+  const recipeId = window.location.hash.replace('#', '');
 
-recipe.getRecipe();
+  if (recipeId) {
+    state.recipe = new Recipe(recipeId);
 
-console.info({ recipe });
+    try {
+      await state.recipe.getRecipe();
 
-const controlRecipe = () => {};
+      const { recipe } = state;
+
+      recipe.calculateServings();
+      recipe.calculatePrepareTime();
+
+      console.info(recipe);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+};
+
+const WINDOW_EVENTS = ['hashchange', 'load'];
+WINDOW_EVENTS.forEach(event => window.addEventListener(event, controlRecipe));
