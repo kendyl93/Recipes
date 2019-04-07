@@ -9,7 +9,7 @@ export default class Recipe {
   async getRecipe() {
     try {
       const recipe = await axios(
-        `https://www.food2fork.com/api/get?key=${KEY}&rId=${this.id}`
+        `https://www.food2fork.com/api/get?key=${KEY[1]}&rId=${this.id}`
       );
       const {
         title,
@@ -37,5 +37,76 @@ export default class Recipe {
 
   calculateServings() {
     this.servings = 4;
+  }
+
+  parseIngredient() {
+    const longUnits = [
+      'tablespoons',
+      'tablespoon',
+      'ounces',
+      'ounce',
+      'teaspoons',
+      'teaspoon',
+      'cups',
+      'pounds'
+    ];
+    const shortUnits = [
+      'tbsp',
+      'tbsp',
+      'oz',
+      'oz',
+      'tsp',
+      'tsp',
+      'cup',
+      'pound'
+    ];
+    const units = [...shortUnits, 'kg', 'g'];
+
+    const parsedIngredients = this.ingredients.map(ingredient => {
+      let currentIngredient = ingredient.toLowerCase();
+      longUnits.forEach((unit, i) => {
+        currentIngredient = currentIngredient.replace(unit, units[i]);
+      });
+
+      currentIngredient = currentIngredient.replace(/ *\([^)]*\) */g, ' ');
+
+      const arrayIngredient = currentIngredient.split(' ');
+      const unitIndex = arrayIngredient.findIndex(ingredientInArray =>
+        units.includes(ingredientInArray)
+      );
+
+      let objectIngredient = {};
+      if (unitIndex > -1) {
+        const arrayCount = arrayIngredient.slice(0, unitIndex);
+
+        let count;
+        if (arrayCount.length === 1) {
+          count = eval(arrayIngredient[0].replace('-', '+'));
+        } else {
+          count = eval(arrayIngredient.slice(0, unitIndex).join('+'));
+        }
+
+        objectIngredient = {
+          count,
+          unit: arrayIngredient[unitIndex],
+          ingredient: arrayIngredient.slice(unitIndex + 1).join(' ')
+        };
+      } else if (parseInt(arrayIngredient[0], 10)) {
+        objectIngredient = {
+          count: parseInt(arrayIngredient[0], 10),
+          unit: '',
+          ingredient: arrayIngredient.slice(1).join(' ')
+        };
+      } else if (unitIndex === -1) {
+        objectIngredient = {
+          count: 1,
+          unit: '',
+          ingredient: currentIngredient
+        };
+      }
+
+      return objectIngredient;
+    });
+    this.ingredients = parsedIngredients;
   }
 }

@@ -1,11 +1,12 @@
 import Search from './models/Search';
 import * as searchView from './views/searchView';
+import * as recipeView from './views/recipeView';
 import Recipe from './models/Recipe';
 import { elements, renderLoader, clearLoader } from './models/Base';
 
 const state = {};
 
-const { searchForm, searchResults, searchResultsPages } = elements;
+const { searchForm, searchResults, searchResultsPages, recipe } = elements;
 const { renderRecipes, clearInputValue, clearSearchRecipesList } = searchView;
 
 const controlSearch = async () => {
@@ -14,12 +15,11 @@ const controlSearch = async () => {
   if (inputValue) {
     state.search = new Search(inputValue);
 
-    clearInputValue();
-    clearSearchRecipesList();
-
-    renderLoader(searchResults);
-
     try {
+      clearInputValue();
+      clearSearchRecipesList();
+
+      renderLoader(searchResults);
       await state.search.axiosAPIrequest();
       clearLoader();
 
@@ -51,8 +51,12 @@ searchResultsPages.addEventListener('click', event => {
 
 const controlRecipe = async () => {
   const recipeId = window.location.hash.replace('#', '');
+  const { renderRecipe, clearRecipe } = recipeView;
 
   if (recipeId) {
+    clearRecipe();
+    renderLoader(recipe);
+
     state.recipe = new Recipe(recipeId);
 
     try {
@@ -60,10 +64,12 @@ const controlRecipe = async () => {
 
       const { recipe } = state;
 
+      recipe.parseIngredient();
       recipe.calculateServings();
       recipe.calculatePrepareTime();
 
-      console.info(recipe);
+      clearLoader();
+      renderRecipe(recipe);
     } catch (error) {
       console.error(error);
     }

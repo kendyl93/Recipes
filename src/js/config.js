@@ -1,1 +1,4 @@
-export const KEY = '11730e31820bef72836b43f4f01d1aa7';
+export const KEY = [
+  '11730e31820bef72836b43f4f01d1aa7',
+  '1750ce6e79510443423cfa54c679777e'
+];
