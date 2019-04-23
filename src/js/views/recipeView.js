@@ -1,5 +1,5 @@
 import { elements } from '../models/Base';
-import { Fractional } from 'fractional';
+import { Fraction } from 'fractional';
 
 export const clearRecipe = () => {
   const { recipe } = elements;

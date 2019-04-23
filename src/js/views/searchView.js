@@ -8,6 +8,19 @@ export const clearInputValue = () => {
   searchInput.value = '';
 };
 
+export const highlightSelected = id => {
+  const existingHighlighted = Array.from(
+    document.querySelectorAll('.results__link-')
+  );
+  existingHighlighted.map(highligted => {
+    highligted.classList.remove('results__link--active');
+  });
+
+  document
+    .querySelector(`a[href='#${id}']`)
+    .classList.add('results__link--active');
+};
+
 export const clearSearchRecipesList = () => {
   searchRecipesList.innerHTML = '';
   searchResultsPages.innerHTML = '';
@@ -93,6 +106,7 @@ const renderPaginationButtons = (
 export const renderRecipes = (recipes, page = 1, recipesPerPage = 10) => {
   const start = (page - 1) * recipesPerPage;
   const end = page * recipesPerPage;
+  console.info({ recipes });
 
   recipes.slice(start, end).map(recipe => renderRecipe(recipe));
 

@@ -52,10 +52,16 @@ searchResultsPages.addEventListener('click', event => {
 const controlRecipe = async () => {
   const recipeId = window.location.hash.replace('#', '');
   const { renderRecipe, clearRecipe } = recipeView;
+  const { highlightSelected } = searchView;
+  const { search } = state;
 
   if (recipeId) {
     clearRecipe();
     renderLoader(recipe);
+
+    if (search) {
+      highlightSelected(recipeId);
+    }
 
     state.recipe = new Recipe(recipeId);
 
