@@ -1,8 +1,33 @@
 import { elements } from '../models/Base';
+import { Fractional } from 'fractional';
 
 export const clearRecipe = () => {
   const { recipe } = elements;
   recipe.innerHTML = '';
+};
+
+const formatCount = count => {
+  if (count) {
+    const [int, dec] = count
+      .toString()
+      .split('.')
+      .map(number => parseInt(number, 10));
+
+    if (!dec) {
+      return count;
+    }
+
+    if (int === 0) {
+      const fractional = new Fraction(count);
+      return `${fractional.numerator}/${fractional.denominator}`;
+    } else {
+      const onlyDecimal = count - int;
+      const fractional = new Fraction(onlyDecimal);
+
+      return `${int} ${fractional.numerator}/${fractional.denominator}`;
+    }
+  }
+  return '?';
 };
 
 export const renderRecipe = recipe => {
@@ -23,7 +48,7 @@ export const renderRecipe = recipe => {
         <svg class="recipe__icon">
             <use href="img/icons.svg#icon-check"></use>
         </svg>
-        <div class="recipe__count">${count}</div>
+        <div class="recipe__count">${formatCount(count)}</div>
         <div class="recipe__ingredient">
             <span class="recipe__unit">${unit}</span>
             ${ingredientName}
