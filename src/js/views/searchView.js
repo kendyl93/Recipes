@@ -10,7 +10,7 @@ export const clearInputValue = () => {
 
 export const highlightSelected = id => {
   const existingHighlighted = Array.from(
-    document.querySelectorAll('.results__link-')
+    document.querySelectorAll('.results__link')
   );
   existingHighlighted.map(highligted => {
     highligted.classList.remove('results__link--active');
@@ -106,7 +106,6 @@ const renderPaginationButtons = (
 export const renderRecipes = (recipes, page = 1, recipesPerPage = 10) => {
   const start = (page - 1) * recipesPerPage;
   const end = page * recipesPerPage;
-  console.info({ recipes });
 
   recipes.slice(start, end).map(recipe => renderRecipe(recipe));
 
