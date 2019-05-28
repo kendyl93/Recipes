@@ -23,6 +23,7 @@
     "@babel/plugin-proposal-class-properties": "^7.4.0",
     "@babel/polyfill": "^7.4.0",
     "axios": "^0.18.0",
-    "fractional": "^1.0.0"
+    "fractional": "^1.0.0",
+    "uniqid": "^5.0.3"
   }
 }
