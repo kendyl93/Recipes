@@ -2,7 +2,7 @@ import { elements } from '../models/Base';
 
 export const renderItem = ({ id, count, unit, ingredient }) => {
   const markup = `
-  <li class="shopping__item" data-itemId=${id}>
+  <li class="shopping__item" data-itemId=${4}>
   <div class="shopping__count">
       <input type="number" value="${count}" step="${count}" class="shopping__count-value">
       <p>${unit}</p>
