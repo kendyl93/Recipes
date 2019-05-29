@@ -5,6 +5,7 @@ import * as searchView from './views/searchView';
 import * as recipeView from './views/recipeView';
 import * as listView from './views/listView';
 import { elements, renderLoader, clearLoader } from './models/Base';
+import { parse } from 'querystring';
 
 const state = {};
 window.state = state;
@@ -105,6 +106,9 @@ elements.shoppingList.addEventListener('click', event => {
   if (id && event.target.matches('.shopping__delete, .shopping__delete *')) {
     state.list.deleteItem(id);
     listView.deleteItem(id);
+  } else if (event.target.matches('.shopping__count-value')) {
+    const value = parseFloat(event.target.value, 10);
+    state.list.updateCount(id, value);
   }
 });
 
