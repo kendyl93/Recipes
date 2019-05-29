@@ -8,7 +8,7 @@ export default class Recipe {
 
   async getRecipe() {
     try {
-      const API_KEY = KEY[2];
+      const API_KEY = KEY[0];
       const recipe = await axios(
         `https://www.food2fork.com/api/get?key=${API_KEY}&rId=${this.id}`
       );

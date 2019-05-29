@@ -2,7 +2,7 @@ import { elements } from '../models/Base';
 
 export const renderItem = ({ id, count, unit, ingredient }) => {
   const markup = `
-  <li class="shopping__item" data-itemId=${4}>
+  <li class="shopping__item" data-itemId=${id}>
   <div class="shopping__count">
       <input type="number" value="${count}" step="${count}" class="shopping__count-value">
       <p>${unit}</p>
@@ -20,5 +20,8 @@ export const renderItem = ({ id, count, unit, ingredient }) => {
 
 export const deleteItem = id => {
   const item = document.querySelector(`[data-itemId="${id}"]`);
-  item.parentElement.removeChild(item);
+
+  if (item) {
+    item.parentElement.removeChild(item);
+  }
 };
