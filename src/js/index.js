@@ -6,12 +6,15 @@ import * as recipeView from './views/recipeView';
 import * as listView from './views/listView';
 import { elements, renderLoader, clearLoader } from './models/Base';
 import { parse } from 'querystring';
+import Likes from './models/Likes';
 
 const state = {};
 window.state = state;
 
 const { searchForm, searchResults, searchResultsPages, recipe } = elements;
 const { renderRecipes, clearInputValue, clearSearchRecipesList } = searchView;
+
+// SEARCH CONTROLLER
 
 const controlSearch = async () => {
   const inputValue = searchView.inputValue();
@@ -53,6 +56,8 @@ searchResultsPages.addEventListener('click', event => {
   }
 });
 
+// RECIPE CONTROLLER
+
 const controlRecipe = async () => {
   const recipeId = window.location.hash.replace('#', '');
   const { renderRecipe, clearRecipe } = recipeView;
@@ -89,6 +94,8 @@ const controlRecipe = async () => {
 const WINDOW_EVENTS = ['hashchange', 'load'];
 WINDOW_EVENTS.forEach(event => window.addEventListener(event, controlRecipe));
 
+// LIST CONTROLLER
+
 const controlList = () => {
   if (!state.list) {
     state.list = new List();
@@ -112,6 +119,29 @@ elements.shoppingList.addEventListener('click', event => {
   }
 });
 
+// LIKE CONTROLLER
+
+const controlLike = () => {
+  if (!state.likes) {
+    state.likes = new Likes();
+  }
+
+  const {
+    id: currentId,
+    title = '',
+    author = '',
+    image_url: image = ''
+  } = state.recipe;
+
+  if (!state.likes.isLiked(currentId)) {
+    const newLike = state.likes.addLike(currentId, title, author, image);
+    console.log({ LIKES: state.likes });
+  } else {
+    state.likes.deleteLike(currentId);
+    console.log({ LIKES_DELETED: state.likes });
+  }
+};
+
 elements.recipe.addEventListener('click', event => {
   if (event.target.matches('.btn-decrease, .btn-decrease *')) {
     if (state.recipe.servings > 1) {
@@ -119,11 +149,17 @@ elements.recipe.addEventListener('click', event => {
       recipeView.updateServingsIngrediends(state.recipe);
     }
   }
+
   if (event.target.matches('.btn-increase, .btn-increase *')) {
     state.recipe.updateServings('increase');
     recipeView.updateServingsIngrediends(state.recipe);
   }
+
   if (event.target.matches('.recipe__btn--add, .recipe__btn--add *')) {
     controlList();
+  }
+
+  if (event.target.matches('.recipe__love, .recipe__love *')) {
+    controlLike();
   }
 });
